@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook from React Router
 
 // Example of the API endpoint to get the products (cars)
-const API_URL = "http://localhost:5000/api/user/product"; // Replace with your actual backend API URL
+const API_URL = "https://car-mangement.onrender.com/api/user/product"; // Replace with your actual backend API URL
 
 function ProductList() {
   const [cars, setCars] = useState([]); // Initialize as empty array

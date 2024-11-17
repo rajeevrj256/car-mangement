@@ -55,7 +55,7 @@ function Header() {
         console.log(userData);
         console.log(userlogged)
         if (userData) {
-            axios.post('http://localhost:5000/api/auth/google', {
+            axios.post('https://car-mangement.onrender.com/api/auth/google', {
                 name: userData.name,
                 email: userData.email,
                 googleId: userData.id,
@@ -83,7 +83,7 @@ function Header() {
                         <a href='/create-product'>
                             <Button variant="Outline" className="rounded-full">+ Create Product</Button>
                         </a>
-                        <a href='/display'>
+                        <a href='/product-list'>
                             <Button variant="Outline" className="rounded-full">My product</Button>
                         </a>
                         <Popover>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CreateProduct() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,8 @@ function CreateProduct() {
     description: "",
     photos: [], // This should store Cloudinary URLs, not file objects
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,7 +63,7 @@ function CreateProduct() {
     console.log("Form Data:", formData);
     try {
       const userData = JSON.parse(localStorage.getItem("user"));
-        const response = await fetch("http://localhost:5000/api/user/product", {
+        const response = await fetch("https://car-mangement.onrender.com/api/user/product", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -77,10 +80,14 @@ function CreateProduct() {
   
         const result = await response.json();
         if (response.ok) {
-          alert("Product created successfully!");
+          
+          navigate("/product-list"); 
           console.log(result);
-        } else {
+        } else if(!userData || userData.id == null) {
+          alert("Please Login ")
+        }else{
           alert("Error creating product: " + result.message);
+
         }
       } catch (error) {
         console.error("Error creating product:", error);

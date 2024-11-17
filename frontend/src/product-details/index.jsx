@@ -21,7 +21,7 @@ const ProductDetails = () => {
     const fetchProductDetails = async () => {
       try {
     
-        const response = await fetch(`http://localhost:5000/api/user/product/${googleId}/${id}`);
+        const response = await fetch(`https://car-mangement.onrender.com/api/user/product/${googleId}/${id}`);
         const data = await response.json();
         setProduct(data);
         setUpdatedProduct({
@@ -42,7 +42,7 @@ const ProductDetails = () => {
   const handleSave = async () => {
     try {
       const googleId = "your_google_id_here"; // Replace with actual googleId
-      const response = await fetch(`http://localhost:5000/api/user/product/${googleId}/${id}`, {
+      const response = await fetch(`https://car-mangement.onrender.com/api/user/product/${googleId}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const ProductDetails = () => {
   const handleDelete = async () => {
     try {
       
-      await fetch(`http://localhost:5000/api/user/product/${googleId}/${id}`, {
+      await fetch(`https://car-mangement.onrender.com/api/user/product/${googleId}/${id}`, {
         method: 'DELETE',
       });
       navigate(`/product/display/${id}`); // Redirect to product list after deletion
