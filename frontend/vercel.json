@@ -1,21 +1,5 @@
 {
-    "routes": [
-      {
-        "src": "/product-list",
-        "dest": "/product-list/index.html"
-      },
-      {
-        "src": "/product-details/:id",
-        "dest": "/product-details/index.html"
-      },
-      {
-        "src": "/create-product",
-        "dest": "/create-product/index.html"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/index.html"
-      }
+    "rewrites":[
+        {"source":"/(.*)","destination":"/"}
     ]
-  }
-  
+}
