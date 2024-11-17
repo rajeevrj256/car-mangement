@@ -1,0 +1,16 @@
+{
+    "redirects": [
+      {
+        "source": "/:bar/foo",
+        "destination": "/foo/:bar",
+        "status": 301
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/:bar/foo",
+        "destination": "/foo/:bar"
+      }
+    ]
+  }
+  
