@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from '../Button'
+import { Button } from '../button'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/Popover"
+} from "@/components/popover"
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 //import { useNavigate } from 'react-router-dom';
 import {
@@ -14,7 +14,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/Dialog"
+} from "@/components/dialog"
 import { FcGoogle } from "react-icons/fc";
 import axios from 'axios';
 
