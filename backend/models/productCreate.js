@@ -25,7 +25,50 @@ const ProductSchema = new mongoose.Schema({
 // Define the Product model
 const Product = mongoose.model("Product", ProductSchema);
 
-// Route handler to save a new product
+/**
+ * @swagger
+ * /api/user/product:
+ *   post:
+ *     summary: Create a new product
+ *     description: Adds a new product to the database.
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               googleId:
+ *                 type: string
+ *               ProductName:
+ *                 type: string
+ *               Description:
+ *                 type: string
+ *               CarModel:
+ *                 type: string
+ *               NumberPlate:
+ *                 type: string
+ *               picture:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *             required:
+ *               - googleId
+ *               - ProductName
+ *               - Description
+ *               - CarModel
+ *               - NumberPlate
+ *               - picture
+ *     responses:
+ *       201:
+ *         description: Product saved successfully
+ *       400:
+ *         description: Bad request (missing fields)
+ *       500:
+ *         description: Server error while saving the product
+ */
+
 export const saveproduct = async (req, res) => {
     const { googleId, ProductName, Description, CarModel, NumberPlate, picture } = req.body;
 
@@ -61,7 +104,28 @@ export const saveproduct = async (req, res) => {
     }
 };
 
-// Route handler to fetch products by googleId
+/**
+ * @swagger
+ * /api/user/product/{googleId}:
+ *   get:
+ *     summary: Get products by Google ID
+ *     description: Fetches all products associated with a specific Google ID.
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: googleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The Google ID of the user
+ *     responses:
+ *       200:
+ *         description: List of products
+ *       404:
+ *         description: No products found for this Google ID
+ *       500:
+ *         description: Server error while fetching products
+ */
 export const getProductsByGoogleId = async (req, res) => {
     const { googleId } = req.params;
 
@@ -81,6 +145,34 @@ export const getProductsByGoogleId = async (req, res) => {
         return res.status(500).json({ message: "Server error while fetching products" });
     }
 };
+/**
+ * @swagger
+ * /api/user/product/{googleId}/{id}:
+ *   get:
+ *     summary: Get a product by its ID and Google ID
+ *     description: Fetches a specific product based on its ID and associated Google ID.
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: googleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The Google ID of the user
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the product
+ *     responses:
+ *       200:
+ *         description: The product with the specified ID
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Server error while fetching the product
+ */
 
 export const getProductsById = async (req, res) => {
     const { googleId,id } = req.params;
@@ -101,7 +193,53 @@ export const getProductsById = async (req, res) => {
         return res.status(500).json({ message: "Server error while fetching products" });
     }
 };
-
+/**
+ * @swagger
+ * /api/user/product/{googleId}/{id}:
+ *   put:
+ *     summary: Update a product by its ID and Google ID
+ *     description: Updates an existing product based on its ID and associated Google ID.
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: googleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The Google ID of the user
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the product
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ProductName:
+ *                 type: string
+ *               Description:
+ *                 type: string
+ *               CarModel:
+ *                 type: string
+ *               NumberPlate:
+ *                 type: string
+ *               picture:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ *       404:
+ *         description: Product not found or Google ID does not match
+ *       500:
+ *         description: Server error while updating the product
+ */
 
 
 export const updateProduct = async (req, res) => {
@@ -135,6 +273,35 @@ export const updateProduct = async (req, res) => {
         return res.status(500).json({ message: "Server error while updating product" });
     }
 };
+
+/**
+ * @swagger
+ * /api/user/product/{googleId}/{id}:
+ *   delete:
+ *     summary: Delete a product by its ID and Google ID
+ *     description: Deletes a specific product based on its ID and associated Google ID.
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: googleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The Google ID of the user
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the product
+ *     responses:
+ *       200:
+ *         description: Product deleted successfully
+ *       404:
+ *         description: Product not found or Google ID does not match
+ *       500:
+ *         description: Server error while deleting the product
+ */
 
 export const deleteProduct = async (req, res) => {
     const { googleId, id } = req.params;  // Get googleId and product _id from URL params

@@ -16,6 +16,63 @@ const UserSchema = new mongoose.Schema({
 // Create user model
 const User = mongoose.model("User", UserSchema);
 
+/**
+ * @swagger
+ * /user/auth:
+ *   post:
+ *     summary: Authenticate or register a user using Google credentials
+ *     description: Creates a new user if they don't exist, or returns the existing user if they do.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the user.
+ *               email:
+ *                 type: string
+ *                 description: Email of the user.
+ *               googleId:
+ *                 type: string
+ *                 description: Google ID of the user.
+ *               verifiedEmail:
+ *                 type: boolean
+ *                 description: Whether the email is verified by Google.
+ *               picture:
+ *                 type: string
+ *                 description: URL of the user's profile picture.
+ *     responses:
+ *       200:
+ *         description: User authenticated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     googleId:
+ *                       type: string
+ *                     verifiedEmail:
+ *                       type: boolean
+ *                     picture:
+ *                       type: string
+ *       400:
+ *         description: Missing required fields in request body
+ *       500:
+ *         description: Internal server error
+ */
+
 // User authentication route handler
 export const userAuthHandler = async (req, res) => {
     const { name, email, googleId, verifiedEmail, picture } = req.body;
