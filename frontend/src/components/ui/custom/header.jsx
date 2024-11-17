@@ -6,7 +6,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import {
     Dialog,
     DialogContent,
@@ -23,6 +23,7 @@ function Header() {
     const [openDialog, setOpenDailog] = useState(false);
     const [userlogged,setuserlogger]=useState(false);
     useEffect(() => {
+       
         console.log(users);
         newRegister();
     }, [userlogged])
@@ -48,24 +49,30 @@ function Header() {
         
     };
 
-    const newRegister=()=>{
-        if(userlogged){
-            axios.get('http://localhost:5000/api/auth/google',{
+    const newRegister = () => {
+        console.log("newregistrai start")
+        const userData = JSON.parse(localStorage.getItem('user'));
+        console.log(userData);
+        console.log(userlogged)
+        if (userData) {
+            axios.post('http://localhost:5000/api/auth/google', {
                 name: userData.name,
-          email: userData.email,
-          googleId: userData.id,
-          verifiedEmail: userData.verified_email,
-          picture: userData.picture,
-        })
-        .then((res) => {
-          console.log('User authenticated:', res.data);
-        })
-        .catch((err) => {
-          console.log('Login error:', err);
+                email: userData.email,
+                googleId: userData.id,
+                verifiedEmail: userData.verified_email,
+                picture: userData.picture,
             })
+            .then((res) => {
+                console.log('User authenticated:', res.data);
+            })
+            .catch((err) => {
+                console.log('Login error:', err);
+            });
         }
 
-    }
+        console.log("complete");
+    };
+    
 
     return (
         <div className='p-2 shadow-sm flex justify-between items-center px-3'>
@@ -73,10 +80,10 @@ function Header() {
             <div>
                 {users ?
                     <div className='flex items-center gap-3'>
-                        <a href='/create-trip'>
+                        <a href='/create-product'>
                             <Button variant="Outline" className="rounded-full">+ Create Product</Button>
                         </a>
-                        <a href='/my-trips'>
+                        <a href='/display'>
                             <Button variant="Outline" className="rounded-full">My product</Button>
                         </a>
                         <Popover>
