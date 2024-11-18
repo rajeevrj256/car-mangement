@@ -8,6 +8,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import CreateProduct from './create-product';
 import ProductList from './product-list';
 import ProductDetails from './product-details';
+import ProductEdit from './product-edit';
+//import ProductEdit from './product-edit';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
   {
     path:'/product-details/:id',
     element: <ProductDetails></ProductDetails>
+  },
+  // {
+  //   path:'/product-edit-details/:id',
+  //   element: <ProductEdit></ProductEdit>
+  // }
+  {
+    path: '/product-edit-details/:id',
+    element: <ProductEdit />, // Ensure this route is uncommented
   }
 ]);
 
