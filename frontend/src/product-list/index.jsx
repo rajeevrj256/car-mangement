@@ -69,7 +69,6 @@ function ProductList() {
                   onClick={() => navigate(`/product-details/${car._id}`)} // Redirect on click
                 >
                   <h3 className="text-xl font-medium text-gray-800">{car.ProductName}</h3>
-                  <p className="text-gray-600">Description: {car.Description}</p>
                   <p className="text-gray-600">Car Model: {car.CarModel}</p>
                   <p className="text-gray-600">Number Plate: {car.NumberPlate}</p>
                 </div>
