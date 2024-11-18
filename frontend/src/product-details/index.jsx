@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+const API_BASE_URL = "https://car-mangement.onrender.com/api/user/product";
+
 const ProductDetails = () => {
-  const { id } = useParams(); // Get the product ID from the URL
-  const navigate = useNavigate(); // Use navigate hook for redirection
-  const [product, setProduct] = useState(null); // State to hold product data
-  const [isEditing, setIsEditing] = useState(false); // State to manage editing mode
+  const { id } = useParams(); // Product ID from the URL
+  const navigate = useNavigate(); // Navigation for redirection
+  const [product, setProduct] = useState({ picture: [] }); // Initial product state
+  const [isEditing, setIsEditing] = useState(false); // Manage editing mode
   const [updatedProduct, setUpdatedProduct] = useState({
-    ProductName: '',
-    Description: '',
-    CarModel: '',
-    NumberPlate: '',
+    ProductName: "",
+    Description: "",
+    CarModel: "",
+    NumberPlate: "",
   });
 
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -18,17 +20,17 @@ const ProductDetails = () => {
 
   // Fetch product details by ID
   useEffect(() => {
+    if (!googleId) return; // Prevent fetch if googleId is missing
     const fetchProductDetails = async () => {
       try {
-    
-        const response = await fetch(`https://car-mangement.onrender.com/api/user/product/${googleId}/${id}`);
+        const response = await fetch(`${API_BASE_URL}/${googleId}/${id}`);
         const data = await response.json();
         setProduct(data);
         setUpdatedProduct({
-          ProductName: data.ProductName,
-          Description: data.Description,
-          CarModel: data.CarModel,
-          NumberPlate: data.NumberPlate,
+          ProductName: data.ProductName || "",
+          Description: data.Description || "",
+          CarModel: data.CarModel || "",
+          NumberPlate: data.NumberPlate || "",
         });
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -36,17 +38,14 @@ const ProductDetails = () => {
     };
 
     fetchProductDetails();
-  }, [id]);
+  }, [id, googleId]);
 
-  // Handle Save Edits
+  // Save edits to the product
   const handleSave = async () => {
     try {
-      const googleId = "your_google_id_here"; // Replace with actual googleId
-      const response = await fetch(`https://car-mangement.onrender.com/api/user/product/${googleId}/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await fetch(`${API_BASE_URL}/${googleId}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProduct),
       });
       const data = await response.json();
@@ -57,95 +56,81 @@ const ProductDetails = () => {
     }
   };
 
-  // Handle Delete Product
+  // Delete the product
   const handleDelete = async () => {
     try {
-      
-      await fetch(`https://car-mangement.onrender.com/api/user/product/${googleId}/${id}`, {
-        method: 'DELETE',
-      });
-      navigate(`/product/display/${id}`); // Redirect to product list after deletion
+      await fetch(`${API_BASE_URL}/${googleId}/${id}`, { method: "DELETE" });
+      navigate("/product-list"); // Redirect after deletion
     } catch (error) {
       console.error("Error deleting product:", error);
     }
   };
 
-  // Handle Change in Editable Fields
+  // Handle input changes during editing
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUpdatedProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value,
-    }));
+    setUpdatedProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  if (!product) {
-    return <p>Loading...</p>;
-  }
+  if (!product) return <p>Loading...</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">{isEditing ? "Edit Product" : "Product Details"}</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        {isEditing ? "Edit Product" : "Product Details"}
+      </h2>
 
       {/* Product Details */}
       <div className="space-y-4">
         <div className="flex flex-col md:flex-row justify-between items-start">
           <div className="w-full md:w-2/3">
             {isEditing ? (
-              <div>
-                <label className="block mb-2">Product Name</label>
-                <input
-                  type="text"
-                  name="ProductName"
-                  value={updatedProduct.ProductName}
-                  onChange={handleChange}
-                  className="border p-2 w-full mb-4"
-                />
-
-                <label className="block mb-2">Description</label>
-                <input
-                  type="text"
-                  name="Description"
-                  value={updatedProduct.Description}
-                  onChange={handleChange}
-                  className="border p-2 w-full mb-4"
-                />
-
-                <label className="block mb-2">Car Model</label>
-                <input
-                  type="text"
-                  name="CarModel"
-                  value={updatedProduct.CarModel}
-                  onChange={handleChange}
-                  className="border p-2 w-full mb-4"
-                />
-
-                <label className="block mb-2">Number Plate</label>
-                <input
-                  type="text"
-                  name="NumberPlate"
-                  value={updatedProduct.NumberPlate}
-                  onChange={handleChange}
-                  className="border p-2 w-full mb-4"
-                />
-              </div>
+              <>
+                {["ProductName", "Description", "CarModel", "NumberPlate"].map(
+                  (field, index) => (
+                    <div key={index} className="mb-4">
+                      <label className="block mb-2 capitalize">{field}</label>
+                      <input
+                        type="text"
+                        name={field}
+                        value={updatedProduct[field]}
+                        onChange={handleChange}
+                        className="border p-2 w-full"
+                      />
+                    </div>
+                  )
+                )}
+              </>
             ) : (
-              <div>
+              <>
                 <p><strong>Product Name:</strong> {product.ProductName}</p>
                 <p><strong>Description:</strong> {product.Description}</p>
                 <p><strong>Car Model:</strong> {product.CarModel}</p>
                 <p><strong>Number Plate:</strong> {product.NumberPlate}</p>
-              </div>
+              </>
             )}
           </div>
 
           {/* Product Images */}
           <div className="w-full md:w-1/3 space-y-4">
-            {product.picture.map((img, index) => (
-              <a key={index} href={img} target="_blank" rel="noopener noreferrer">
-                <img src={img} alt={`Car Image ${index + 1}`} className="object-cover w-full h-32 mb-4 rounded-md shadow-md" />
-              </a>
-            ))}
+            {product.picture?.length > 0 ? (
+              product.picture.map((img, index) => (
+                <a
+                  key={index}
+                  href={img}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={img}
+                    alt={`Car Image ${index + 1}`}
+                    className="object-cover w-full h-32 mb-4 rounded-md shadow-md"
+                  />
+                </a>
+              ))
+            ) : (
+              <p>No pictures available.</p>
+            )}
           </div>
         </div>
       </div>
